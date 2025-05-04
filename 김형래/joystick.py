@@ -1,52 +1,18 @@
-# 1. 각 위치에서 가장 가까운 다음 변경위치로 이동
-# ABBBAAAB 반례 발견
-# 2. 변경할 문자열이 더 적은 위치로 이동 ?
-
-def getYdist(char) :
-    return ord(char) - 65 if char <= 'N' else 26 - (ord(char) - 65)
-
 def solution(name):
-    answer = 0
-    idx, Pdist, Ndist, Cidx, length = 0,0,0,0,len(name) 
-    # 인덱스, +이동거리, -이동거리, 커서위치, 이름길이
-    nameList = list(name)
-    # 문자열은 인덱싱하여 수정이 불가능하므로 list로 변환
-
-    while True :
-        if nameList.count('A') == length : # 변환 완료되면 while 탈출
-            break
-        Cidx = idx
-        if nameList[idx] == 'A' : # 현재위치가 A면 이동해야한다
-            idx += 1 # +방향 이동
-            if idx >= length :
-                idx %= length
-            while nameList[idx] == 'A' :
-                idx += 1
-                if idx >= length :
-                    idx %= length
-            Pdist = abs(Cidx-idx)
-            idx = Cidx-1 # 원위치 후 -방향 이동
-            if idx < -length :
-                idx %= length
-            while nameList[idx] == 'A' :
-                idx -= 1
-                if idx < -length :
-                    idx %= length
-            Ndist = abs(Cidx-idx)
-        if Pdist > Ndist : # -방향 이동이 더 가까울때
-            idx = (Cidx - Ndist) % length
-            answer += Ndist
-        else : # +방향 이동이 더 가까울때
-            idx = (Cidx + Pdist) % length
-            answer += Pdist
-        answer += getYdist(nameList[idx])
-        nameList[idx] = 'A'
-        
-        Pdist, Ndist = 0,0 # 변수 초기화
-        # print("변환 후 : %s %d" % (nameList, answer))
-        
-    return answer
-
-# def solution(name):
-#     print(-8 % 6)
-# 음수의 나머지연산 공부 필요
+    length = len(name)
+    xmove, ymove = length-1, 0
+    for i in range(length) :
+        ymove += ord(name[i]) - 65 if name[i] <= 'N' else 91 - ord(name[i])
+        # 65 : ord('A') 91 : ord('Z') + 1 (시작지점이 A이므로 + 1)
+        nextidx = i + 1
+        # 다음 index
+        while nextidx < length and name[nextidx] == 'A' :
+            nextidx += 1
+        # 연속된 A는 넘기는 과정
+        xmove = min(xmove, i*2 + length-nextidx, (length-nextidx)*2 + i)
+        # 최적의 거리를 고르는(최소 거리를 고르는) 과정 : 1,2,3 비교
+        # 1. 처음부터 오른쪽 끝까지 한 번에 이동 : length-1
+        # 2. 처음부터 현재 위치 i까지 왔다가 다시 처음 위치로 돌아간 후 nextidx까지 이동            : (i*2) + (length-nextidx)
+        # 3. 처음부터 nextidx까지 왼쪽(-방향) 으로 갔다가 다시 돌아온 후 nextidx까지 이동 : (length-nextidx)*2 + i
+        # 이 과정을 name을 순회하면서 수행 (이해를 돕기 위한 괄호를 넣었음!)
+    return xmove + ymove
