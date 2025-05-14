@@ -14,7 +14,7 @@ def solution(s, skip, index): # 내 코드
         answer += check[-1]
         check = []
 
-    return ''.join(answer)
+    return answer
 
 def solution2(s, skip, index): # 좋은 코드
     skip = set(skip)
