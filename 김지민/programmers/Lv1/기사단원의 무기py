@@ -8,7 +8,6 @@ def solution(number, limit, p_limit): # 내 코드
             if soldier % i == 0:
                 power += 2
             i += 1
-                
             if i == soldier ** 0.5: 
                 power -= 1
             
