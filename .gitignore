@@ -1,0 +1,8 @@
+<<<<<<< HEAD
+__*
+.DS_Store
+=======
+# macOS 쓰레기 파일 무시
+.DS_Store
+._*
+>>>>>>> fed13da
